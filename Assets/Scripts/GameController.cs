@@ -4,15 +4,45 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private TimeController timeController;
+
     void Start()
+    {
+        timeController = GetComponent<TimeController>();
+    }
+
+
+    void Update()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Pause/Unpause the game
+    /// </summary>
+    public void TogglePause()
     {
-        
+        if(timeController.isPaused)
+        {
+            StartTime();
+        }
+        else
+        {
+            StopTime();
+        }
+    }
+    /// <summary>
+    /// Start the game via time controller
+    /// </summary>
+    public void StartTime()
+    {
+        timeController.StartTime();
+    }
+    /// <summary>
+    ///  Stop the game via time controller
+    /// </summary>
+    public void StopTime()
+    {
+        timeController.StopTime();
     }
 }
