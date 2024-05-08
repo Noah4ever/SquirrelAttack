@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Updateable : MonoBehaviour, IUpdateable
+public abstract class Updateable : MonoBehaviour, IUpdateable
 {
     protected bool canUpdate = false;
     protected TimeController timeController;
@@ -24,19 +24,50 @@ public class Updateable : MonoBehaviour, IUpdateable
         canUpdate = false;
     }
 
+    protected void addToTimeController() 
+    {
+        timeController.AddUpdateable(this);
+    }
+
     /// <summary>
     /// Start the time controller and add this object to the updateable list
     /// </summary>
-    void Start()
+    protected virtual void Start()
+    {        
+    }
+    /// <summary>
+    /// Gets the GameController Component in the Scene
+    /// </summary>
+    /// <returns> The GameController Component in the Scene </returns>
+    protected GameController getGameController() 
     {
-        timeController = GetComponent<TimeController>();        
-        timeController.AddUpdateable(this);
+        GameObject gameControllerGO = GameObject.Find("GameController");
+        Debug.Assert(gameControllerGO != null, "Could Not Find GameController GameObject in the Scene");
+
+        GameController gameController = gameControllerGO.GetComponent<GameController>();
+        Debug.Assert(gameController != null, "Could Not Find GameController Component on the GameController GameObject");
+
+        return gameController;
+    }
+    /// <summary>
+    /// Gets the TimeController Component in the Scene
+    /// </summary>
+    /// <returns> The TimeController Component in the Scene </returns>
+    protected TimeController getTimeController()
+    {
+        GameObject timeControllerGO = GameObject.Find("TimeController");
+        Debug.Assert(timeControllerGO != null, "Could Not Find TimeController GameObject in the Scene");
+
+        TimeController timeController = timeControllerGO.GetComponent<TimeController>();
+        Debug.Assert(timeController != null, "Could Not Find TimeController Component on the TimeController GameObject");
+
+        return timeController;
     }
 
     /// <summary>
     /// Check if the object can update and call the update method
     /// </summary>
-    void Update()
+    protected virtual void Update()
     {
         if (canUpdate)
         {
@@ -47,7 +78,7 @@ public class Updateable : MonoBehaviour, IUpdateable
     /// <summary>
     /// Update method to be overridden by child classes
     /// </summary>
-    virtual public void update()
+    public virtual void update()
     {
         // Override this method in the child class
     }

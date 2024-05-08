@@ -9,13 +9,13 @@ public class Building : Updateable
     [SerializeField]
     private int reclaimed { get; set; }
 
-    void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }
