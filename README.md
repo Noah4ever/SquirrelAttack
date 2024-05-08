@@ -39,7 +39,7 @@ SquirrelAttack is being developed using Unity, leveraging its powerful tools and
 
 ### Support
 
-If you encounter any problems or have questions about SquirrelAttack, please don't hesitate to reach out by [opening an issue](https://github.com/noah4ever/squirrelattack/issues) on GitHub.
+If you encounter any problems or have questions about SquirrelAttack, please don't hesitate to reach out by [opening an issue](https://github.com/noah4ever/SquirrelAttack/issues) on GitHub.
 
 ### Enjoy the Game!
 
