@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Updateable
 {
     private GameController gameController;
     void Start()
     {
-        gameController = GetComponent<GameController>();
+        base.Start();
+
+        gameController = getGameController();
     }
 
     void Update()
     {
-        
+        base.Update();
     }
 
     public void Move()
