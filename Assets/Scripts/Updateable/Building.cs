@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : Updateable
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private float cityInfluence { get; set; }
+    [SerializeField]
+    private int reclaimed { get; set; }
+
+    protected override void Start()
     {
-        
+        base.Start();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }

@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Updateable
 {
-    // Start is called before the first frame update
+    private GameController gameController;
     void Start()
     {
-        
+        base.Start();
+
+        gameController = getGameController();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        base.Update();
+    }
+
+    public void Move()
+    {
+        // Move the player
+    }
+
+    /// <summary>
+    /// Pause/Unpause the game
+    /// </summary>
+    public void Pause()
+    {
+        gameController.TogglePause();
     }
 }
