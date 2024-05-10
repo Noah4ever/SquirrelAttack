@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 13966, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: BasicScene
   m_EditorClassIdentifier: 
-  templateScene: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  templateScene: {fileID: 102900000, guid: 7306f4cb53ea6fd419b0d08e15c7f896, type: 3}
   templateName: 
   description: 
   preview: {fileID: 0}
   dependencies:
   - dependency: {fileID: 2742806375888147787, guid: abbe85dd12ec35e489f5edd4992b2fd6, type: 3}
-    instantiationMode: 1
+    instantiationMode: 0
   - dependency: {fileID: 6639261212608587734, guid: 70d52c56578e65f4d9ebc8def98116b4, type: 3}
-    instantiationMode: 1
+    instantiationMode: 0
   - dependency: {fileID: 2823227933556274516, guid: 90a449e5f5b6f0e418f03766b8837268, type: 3}
-    instantiationMode: 1
+    instantiationMode: 0
   templatePipeline: {fileID: 0}
   badge: {fileID: 0}
   addToDefaults: 0
