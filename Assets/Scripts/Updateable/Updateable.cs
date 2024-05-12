@@ -34,6 +34,8 @@ public abstract class Updateable : MonoBehaviour, IUpdateable
     /// </summary>
     protected virtual void Start()
     {        
+        timeController = getTimeController();
+        addToTimeController();
     }
     /// <summary>
     /// Gets the GameController Component in the Scene
