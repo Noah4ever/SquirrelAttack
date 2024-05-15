@@ -7,7 +7,6 @@ public class Clickable : MonoBehaviour
     [SerializeField]
     private bool isSelected = false;
     [SerializeField]
-    private EntityType entityType = EntityType.None;
 
     /// <summary>
     /// Whether this clickable is currently selected.
@@ -15,15 +14,6 @@ public class Clickable : MonoBehaviour
     public bool IsSelected
     {
         get { return isSelected; }
-    }
-
-    /// <summary>
-    /// The type of entity this clickable represents.
-    /// </summary>
-    public EntityType EntityType
-    {
-        get { return entityType; }
-        set { entityType = value; }
     }
 
     /// <summary>

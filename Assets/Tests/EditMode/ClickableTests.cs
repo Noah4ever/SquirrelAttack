@@ -28,14 +28,4 @@ public class ClickableTests
         Assert.IsFalse(clickable.IsSelected);
     }
 
-    [Test]
-    public void SetEntityType()
-    {
-        Clickable clickable = new Clickable();
-
-        clickable.EntityType = EntityType.Squirrel;
-
-        Assert.AreEqual(EntityType.Squirrel, clickable.EntityType);
-    }
-
 }

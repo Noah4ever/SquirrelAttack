@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EntityType
+public class ActionData
 {
-    None,
-    Squirrel,
-    Bear
+    public ActionType actionType;
 }

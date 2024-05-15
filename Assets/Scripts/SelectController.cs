@@ -1,52 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SelectController : MonoBehaviour
 {
-
-    // vector of selected objects
-    // private List<Clickable> selectedObjects = new List<Clickable>();
+    [SerializeField]
+    private List<Clickable> selectedObjects = new List<Clickable>();
 
     public enum ClickType
     {
-        ClickOne, // Single Click
-        ClickAddRemove, // Shift Click
+        Select, 
+        ShiftSelect,
+        Move, 
+        Attack
     }
 
-    private void addSelected(Clickable clickable, ClickType clickType)
-    {
-
-        if (clickType == ClickType.ClickOne)
-        {
-            DeselectAll();
-            // selectedObjects.Add(clickable);
-        }
-        else if (clickType == ClickType.ClickAddRemove)
-        {
-            // if(selectedObjects.Contains(clickable))
-            // {
-            //     selectedObjects.Remove(clickable);
-            // }
-            // else
-            // {
-            //     selectedObjects.Add(clickable);
-            // }
-        }
-
-    }
-
-    private void DeselectAll()
-    {
-        // foreach (Clickable selectedObject in selectedObjects)
-        // {
-        //     selectedObject.Deselect();
-        // }
-        // selectedObjects.Clear();
-    }
-
-    public /*Clickable*/ void Click(Vector2 screenClickPosition, ClickType clickType)
+    public void Click(Vector3 screenClickPosition, ClickType clickType)
     {
         // Raycast 3D to find the object that was clicked
         Ray ray = Camera.main.ScreenPointToRay(screenClickPosition);
@@ -54,24 +26,93 @@ public class SelectController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            // Check if the object is a selectable object
+            // Check if the object is a clickable object
             Clickable clickable = hit.collider.GetComponent<Clickable>();
-            if (clickable == null)
-            {
-                // Select the object
+            if (clickable == null) return;
 
-                // clickable.Select();
-                // addSelected(clickable, clickType);
-                // return clickable;
+            switch (clickType)
+            {
+                case ClickType.Select:
+                    DeselectAll();
+                    SelectObject(clickable);
+                    break;
+                case ClickType.ShiftSelect:
+                    ToggleSelectObject(clickable);
+                    break;
+                case ClickType.Move:
+                    MoveObject(clickable);
+                    break;
+                case ClickType.Attack:
+                    AttackObject(clickable);
+                    break;
             }
+
         }
     }
 
-    public /*Clickable*/ void Select(Vector2 screenClickPosition1, Vector2 screenClickPosition2, ClickType clickType)
+    private void AttackObject(Clickable clickable)
     {
+        // Loop through all selected objects
+        foreach (Clickable selectedObject in selectedObjects)
+        {
+            // Get the lifeform component of the selected object
+            selectedObject.GetComponent<Lifeform>();
+            if (selectedObject.GetComponent<Lifeform>() == null) continue;
+            // Call the doAction method of the lifeform component with an AttackActionData object
+            selectedObject.GetComponent<Lifeform>().doAction(new AttackActionData(clickable.gameObject));
+        }
+    }
 
-        
+    private void MoveObject(Clickable clickable)
+    {
+        // Loop through all selected objects
+        foreach (Clickable selectedObject in selectedObjects)
+        {
+            // Get the lifeform component of the selected object
+            selectedObject.GetComponent<Lifeform>();
+            if (selectedObject.GetComponent<Lifeform>() == null) continue;
+            // Call the doAction method of the lifeform component with an MoveActionData object
+            selectedObject.GetComponent<Lifeform>().doAction(new MoveActionData(clickable.transform.position));
+        }
+    }
 
+    private void SelectObject(Clickable clickable)
+    {
+        clickable.Select();
+        selectedObjects.Add(clickable);
+    }
+
+    private void ToggleSelectObject(Clickable clickable)
+    {
+        if (selectedObjects.Contains(clickable))
+        {
+            clickable.Deselect();
+            selectedObjects.Remove(clickable);
+        }
+        else
+        {
+            clickable.Select();
+            selectedObjects.Add(clickable);
+        }
+    }   
+
+    public void DeselectAll()
+    {
+        foreach (Clickable selectedObject in selectedObjects)
+        {
+            selectedObject.Deselect();
+        }
+        selectedObjects.Clear();
+    }
+
+    public bool hasSelectedObjects()
+    {
+        return selectedObjects.Count > 0;
+    }
+
+    public void Select(Vector2 screenClickPosition1, Vector2 screenClickPosition2, ClickType clickType)
+    {
+        throw new System.NotImplementedException();
     }
 
 

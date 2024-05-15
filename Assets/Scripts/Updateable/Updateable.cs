@@ -64,6 +64,18 @@ public abstract class Updateable : MonoBehaviour, IUpdateable
         return timeController;
     }
 
+    protected SelectController getSelectController()
+    {
+        GameObject selectcontrollerGo = GameObject.Find("SelectController");
+        Debug.Assert(selectcontrollerGo != null, "Could Not Find SelectController GameObject in the Scene");
+
+        SelectController selectController = selectcontrollerGo.GetComponent<SelectController>();
+        Debug.Assert(selectController != null, "Could Not Find SelectController Component on the SelectController GameObject");
+
+        return selectController;
+    }
+
+
     /// <summary>
     /// Check if the object can update and call the update method
     /// </summary>
