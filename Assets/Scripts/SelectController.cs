@@ -33,7 +33,7 @@ public class SelectController : MonoBehaviour
         {
             // Get the Clickable component from the hit object
             Clickable clickable = hit.collider.GetComponent<Clickable>();
-            if (clickable == null) {
+            if (clickable == null && clickType == ClickType.Select ) {
                 DeselectAll();
                 return;
             } // Exit if the object is not clickable
