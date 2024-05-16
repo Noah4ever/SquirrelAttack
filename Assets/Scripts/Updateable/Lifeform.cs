@@ -21,7 +21,7 @@ public class Lifeform : Updateable
     private float presenceRadius { get; set; }
 
     [SerializeField]
-    private List<ActionType> actions;
+    protected List<ActionType> actions;
 
     [SerializeField]
     private TeamType teamType { get; }

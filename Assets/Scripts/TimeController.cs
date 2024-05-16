@@ -26,6 +26,7 @@ public class TimeController : MonoBehaviour
             currentTick++;
             timer -= 1.0f / tickRate;
         }
+        StartTime();
     }
 
     /// <summary>

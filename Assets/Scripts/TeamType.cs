@@ -5,6 +5,6 @@ using UnityEngine;
 public enum TeamType
 {
     Neutral,
-    Ally,
+    Friendly,
     Enemy
 }

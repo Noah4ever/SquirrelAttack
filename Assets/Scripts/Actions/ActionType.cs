@@ -4,6 +4,6 @@ using UnityEngine;
 
 public enum ActionType
 {
-    MOVE,
-    ATTACK,
+    Move,
+    Attack,
 }

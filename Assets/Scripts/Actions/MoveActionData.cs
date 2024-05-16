@@ -9,5 +9,6 @@ public class MoveActionData : ActionData
     public MoveActionData(Vector3 targetPosition)
     {
         this.targetPosition = targetPosition;
+        actionType = ActionType.Move;
     }
 }

@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngineInternal;
+using static Codice.Client.Commands.WkTree.WorkspaceTreeNode;
 
 public class SelectController : MonoBehaviour
 {
@@ -14,39 +17,82 @@ public class SelectController : MonoBehaviour
     {
         Select, 
         ShiftSelect,
-        Move, 
-        Attack
+        RightClick
     }
 
+    // TODO: Please redo this hell. Especially the if(selectedObjects.Count > 0) part.
+    // TODO: Implement should not be able to select enemy and friendly at the same time.
     public void Click(Vector3 screenClickPosition, ClickType clickType)
     {
-        // Raycast 3D to find the object that was clicked
+        // Convert the screen click position to a ray
         Ray ray = Camera.main.ScreenPointToRay(screenClickPosition);
-
         RaycastHit hit;
+
+        // Perform a raycast to detect what was clicked
         if (Physics.Raycast(ray, out hit))
         {
-            // Check if the object is a clickable object
+            // Get the Clickable component from the hit object
             Clickable clickable = hit.collider.GetComponent<Clickable>();
-            if (clickable == null) return;
+            if (clickable == null) {
+                DeselectAll();
+                return;
+            } // Exit if the object is not clickable
 
-            switch (clickType)
+            // Handle the click based on whether there are selected objects
+            if (selectedObjects.Count > 0)
             {
-                case ClickType.Select:
-                    DeselectAll();
-                    SelectObject(clickable);
-                    break;
-                case ClickType.ShiftSelect:
-                    ToggleSelectObject(clickable);
-                    break;
-                case ClickType.Move:
-                    MoveObject(clickable);
-                    break;
-                case ClickType.Attack:
-                    AttackObject(clickable);
-                    break;
+                HandleSelectedObjectsClick(clickable, hit.point, clickType);
             }
+            else
+            {
+                HandleNoSelectedObjectsClick(clickable, clickType);
+            }
+        }
+    }
 
+    private void HandleSelectedObjectsClick(Clickable clickable, Vector3 hitPoint, ClickType clickType)
+    {
+        // Handle click when there are selected objects
+        switch (clickType)
+        {
+            case ClickType.RightClick:
+                // Move the selected object(s) to the clicked point
+                MoveObject(hitPoint);
+                break;
+            case ClickType.Select:
+                // Handle selection click with selected objects
+                HandleSelectClickWithSelectedObjects(clickable);
+                break;
+            case ClickType.ShiftSelect:
+                // Toggle the selection state of the clicked object
+                ToggleSelectObject(clickable);
+                break;
+        }
+    }
+
+    private void HandleNoSelectedObjectsClick(Clickable clickable, ClickType clickType)
+    {
+        // Handle click when there are no selected objects
+        if (clickType == ClickType.Select)
+        {
+            // Select the clicked object
+            SelectObject(clickable);
+        }
+    }
+
+    private void HandleSelectClickWithSelectedObjects(Clickable clickable)
+    {
+        // Handle selection click based on the team type of the clicked object
+        if (clickable.TeamType == TeamType.Enemy)
+        {
+            // Attack the clicked enemy object
+            AttackObject(clickable);
+        }
+        else if (clickable.TeamType == TeamType.Friendly)
+        {
+            // Deselect all currently selected objects and select the clicked friendly object
+            DeselectAll();
+            SelectObject(clickable);
         }
     }
 
@@ -63,7 +109,7 @@ public class SelectController : MonoBehaviour
         }
     }
 
-    private void MoveObject(Clickable clickable)
+    private void MoveObject(Vector3 hitPoint)
     {
         // Loop through all selected objects
         foreach (Clickable selectedObject in selectedObjects)
@@ -72,7 +118,7 @@ public class SelectController : MonoBehaviour
             selectedObject.GetComponent<Lifeform>();
             if (selectedObject.GetComponent<Lifeform>() == null) continue;
             // Call the doAction method of the lifeform component with an MoveActionData object
-            selectedObject.GetComponent<Lifeform>().doAction(new MoveActionData(clickable.transform.position));
+            selectedObject.GetComponent<Lifeform>().doAction(new MoveActionData(hitPoint));
         }
     }
 

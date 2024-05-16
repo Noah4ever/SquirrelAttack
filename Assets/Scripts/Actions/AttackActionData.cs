@@ -8,5 +8,6 @@ public class AttackActionData : ActionData
     public AttackActionData(GameObject target)
     {
         this.target = target;
+        actionType = ActionType.Attack;
     }
 }

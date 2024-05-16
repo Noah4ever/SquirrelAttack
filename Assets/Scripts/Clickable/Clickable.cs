@@ -7,6 +7,7 @@ public class Clickable : MonoBehaviour
     [SerializeField]
     private bool isSelected = false;
     [SerializeField]
+    private TeamType teamType;
 
     /// <summary>
     /// Whether this clickable is currently selected.
@@ -14,6 +15,14 @@ public class Clickable : MonoBehaviour
     public bool IsSelected
     {
         get { return isSelected; }
+    }
+
+    /// <summary>
+    /// The team type of this clickable.
+    /// </summary>
+    public TeamType TeamType
+    {
+        get { return teamType; }
     }
 
     /// <summary>

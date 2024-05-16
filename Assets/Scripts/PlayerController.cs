@@ -7,31 +7,20 @@ public class PlayerController : Updateable
     private GameController gameController;
     private SelectController selectController;
 
+    private bool isShiftDown = false;
+
     void Start()
     {
         base.Start();
 
         gameController = getGameController();
         selectController = getSelectController();
+        addToTimeController();
     }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.LeftShift))
-        {
-            selectController.Click(Input.mousePosition, SelectController.ClickType.Select);
-        }
-        else if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
-        {
-            selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftSelect);
-        }
-
         base.Update();
-    }
-
-    public void Move()
-    {
-        // Move the player
     }
 
     /// <summary>
@@ -40,5 +29,38 @@ public class PlayerController : Updateable
     public void Pause()
     {
         gameController.TogglePause();
+    }
+
+    public override void update()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            isShiftDown = true;
+        }
+        if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            isShiftDown = false;
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            if(isShiftDown)
+            {
+                // Shift select
+                selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftSelect);
+            }
+            else
+            {
+                // Normal Select
+                selectController.Click(Input.mousePosition, SelectController.ClickType.Select);
+            }
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            selectController.Click(Input.mousePosition, SelectController.ClickType.RightClick);
+        }
+
+
     }
 }
