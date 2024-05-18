@@ -14,7 +14,8 @@ public class PlayerController : Updateable
         base.Start();
 
         gameController = getGameController();
-        selectController = getSelectController();
+        GameObject selectcontrollerGo = GameObject.Find("SelectController");
+        selectController = selectcontrollerGo.GetComponent<SelectController>();
         addToTimeController();
     }
 
@@ -47,12 +48,12 @@ public class PlayerController : Updateable
             if(isShiftDown)
             {
                 // Shift select
-                selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftSelect);
+                selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftLeftClick);
             }
             else
             {
                 // Normal Select
-                selectController.Click(Input.mousePosition, SelectController.ClickType.Select);
+                selectController.Click(Input.mousePosition, SelectController.ClickType.LeftClick);
             }
         }
 

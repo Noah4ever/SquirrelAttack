@@ -1,12 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngineInternal;
-using static Codice.Client.Commands.WkTree.WorkspaceTreeNode;
 
 public class SelectController : MonoBehaviour
 {
@@ -15,13 +10,13 @@ public class SelectController : MonoBehaviour
 
     public enum ClickType
     {
-        Select, 
-        ShiftSelect,
-        RightClick
+        LeftClick, 
+        ShiftLeftClick,
+        RightClick,
+        ShiftRightClick
     }
 
-    // TODO: Please redo this hell. Especially the if(selectedObjects.Count > 0) part.
-    // TODO: Implement should not be able to select enemy and friendly at the same time.
+    // TODO: Test this shit
     public void Click(Vector3 screenClickPosition, ClickType clickType)
     {
         // Convert the screen click position to a ray
@@ -33,66 +28,83 @@ public class SelectController : MonoBehaviour
         {
             // Get the Clickable component from the hit object
             Clickable clickable = hit.collider.GetComponent<Clickable>();
-            if (clickable == null && clickType == ClickType.Select ) {
+
+            if (clickable == null && clickType == ClickType.LeftClick) {
                 DeselectAll();
                 return;
-            } // Exit if the object is not clickable
+            }
 
-            // Handle the click based on whether there are selected objects
-            if (selectedObjects.Count > 0)
+            if (clickable != null && clickType == ClickType.LeftClick)
             {
-                HandleSelectedObjectsClick(clickable, hit.point, clickType);
+                DeselectAll();
+                SelectObject(clickable);
             }
-            else
+            else if (clickable != null && clickType == ClickType.ShiftLeftClick)
             {
-                HandleNoSelectedObjectsClick(clickable, clickType);
+                // check if the clickable is of the same type as the selected objects
+                if (selectedObjects.Count > 0)
+                {
+                    if (selectedObjects[0].TeamType == clickable.TeamType)
+                    {
+                        ToggleSelectObject(clickable);
+                    }
+                    else
+                    {
+                        DeselectAll();
+                        SelectObject(clickable);
+                    }
+                }
+                else
+                {
+                    SelectObject(clickable);
+                }
             }
+            else if (clickType == ClickType.RightClick)
+            {
+                if (selectedObjects.Count > 0)
+                {
+                    if (selectedObjects[0].TeamType != TeamType.Friendly) return;
+                    if(clickable == null)
+                    {
+                        MoveObject(hit.point);
+                    }
+                    else
+                    {
+                        HandleSelectedObjectsClick(clickable, hit.point);
+                    }
+                }
+                else
+                {
+                    // Context menu
+                }
+            }
+            else if (clickType == ClickType.ShiftRightClick)
+            {
+                // Not implemented yet
+                // Maybe implement a walk path with multiple waypoints
+            }
+
         }
     }
 
-    private void HandleSelectedObjectsClick(Clickable clickable, Vector3 hitPoint, ClickType clickType)
+    private void HandleSelectedObjectsClick(Clickable clickable, Vector3 hitPoint)
     {
         // Handle click when there are selected objects
-        switch (clickType)
+        switch (clickable.TeamType)
         {
-            case ClickType.RightClick:
-                // Move the selected object(s) to the clicked point
+            case TeamType.Friendly:
+                // Right Click on Friendly should follow the clicked object
+                FollowObject(clickable);
+                break;
+            case TeamType.Enemy:
+                AttackObject(clickable);
+                break;
+            case TeamType.Neutral:
                 MoveObject(hitPoint);
                 break;
-            case ClickType.Select:
-                // Handle selection click with selected objects
-                HandleSelectClickWithSelectedObjects(clickable);
+            default:
+                MoveObject(hitPoint);
                 break;
-            case ClickType.ShiftSelect:
-                // Toggle the selection state of the clicked object
-                ToggleSelectObject(clickable);
-                break;
-        }
-    }
-
-    private void HandleNoSelectedObjectsClick(Clickable clickable, ClickType clickType)
-    {
-        // Handle click when there are no selected objects
-        if (clickType == ClickType.Select)
-        {
-            // Select the clicked object
-            SelectObject(clickable);
-        }
-    }
-
-    private void HandleSelectClickWithSelectedObjects(Clickable clickable)
-    {
-        // Handle selection click based on the team type of the clicked object
-        if (clickable.TeamType == TeamType.Enemy)
-        {
-            // Attack the clicked enemy object
-            AttackObject(clickable);
-        }
-        else if (clickable.TeamType == TeamType.Friendly)
-        {
-            // Deselect all currently selected objects and select the clicked friendly object
-            DeselectAll();
-            SelectObject(clickable);
         }
     }
 
@@ -102,20 +114,29 @@ public class SelectController : MonoBehaviour
         foreach (Clickable selectedObject in selectedObjects)
         {
             // Get the lifeform component of the selected object
-            selectedObject.GetComponent<Lifeform>();
             if (selectedObject.GetComponent<Lifeform>() == null) continue;
             // Call the doAction method of the lifeform component with an AttackActionData object
             selectedObject.GetComponent<Lifeform>().doAction(new AttackActionData(clickable.gameObject));
         }
     }
 
+    private void FollowObject(Clickable clickable)
+    {
+        // Loop through all selected objects
+        foreach (Clickable selectedObject in selectedObjects)
+        {
+            // Get the lifeform component of the selected object
+            if (selectedObject.GetComponent<Lifeform>() == null) continue;
+            // Call the doAction method of the lifeform component with an FollowActionData object
+            selectedObject.GetComponent<Lifeform>().doAction(new FollowActionData(clickable.gameObject));
+        }
+    }
     private void MoveObject(Vector3 hitPoint)
     {
         // Loop through all selected objects
         foreach (Clickable selectedObject in selectedObjects)
         {
             // Get the lifeform component of the selected object
-            selectedObject.GetComponent<Lifeform>();
             if (selectedObject.GetComponent<Lifeform>() == null) continue;
             // Call the doAction method of the lifeform component with an MoveActionData object
             selectedObject.GetComponent<Lifeform>().doAction(new MoveActionData(hitPoint));

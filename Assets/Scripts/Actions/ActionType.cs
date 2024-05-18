@@ -6,4 +6,5 @@ public enum ActionType
 {
     Move,
     Attack,
+    Follow,
 }

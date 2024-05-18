@@ -6,25 +6,22 @@ using UnityEngine;
 public class Lifeform : Updateable
 {
     [SerializeField]
-    private float speed { get; set; }
+    protected float speed { get; set; }
     [SerializeField]
-    private float fear { get; set; }
+    protected float fear { get; set; }
     [SerializeField]
-    private float mood { get; set; }
+    protected float mood { get; set; }
     [SerializeField]
-    private float damage { get; set; }
+    protected float damage { get; set; }
     [SerializeField]
-    private float attackRadius { get; set; }
+    protected float attackRadius { get; set; }
     [SerializeField]
-    private float presence { get; set; }
+    protected float presence { get; set; }
     [SerializeField]
-    private float presenceRadius { get; set; }
+    protected float presenceRadius { get; set; }
 
     [SerializeField]
     protected List<ActionType> actions;
-
-    [SerializeField]
-    private TeamType teamType { get; }
 
     /// <summary>
     /// Override this method to implement the lifeform's behavior
