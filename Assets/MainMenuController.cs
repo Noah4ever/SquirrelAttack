@@ -1,5 +1,7 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,8 +15,14 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private Button exitButton;
 
+    [SerializeField]
+    private CinemachineVirtualCamera virtualCamera;
+
+
     private void Start()
     {
+        // play animation on virtual camera
+        virtualCamera.GetComponent<Animator>().Play("CameraMainMenu");
         startButton.onClick.AddListener(StartGame);
         settingsButton.onClick.AddListener(Settings);
         exitButton.onClick.AddListener(ExitGame);
