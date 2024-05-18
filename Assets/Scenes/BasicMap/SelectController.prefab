@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8838585480398894374}
   - component: {fileID: 942697186611009971}
   m_Layer: 0
-  m_Name: SelectController 1
+  m_Name: SelectController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
