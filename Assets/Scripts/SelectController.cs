@@ -50,7 +50,11 @@ public class SelectController : MonoBehaviour
                     }
                     else
                     {
+                        if (hasSelectedObjects())
+                        {
+
                         DeselectAll();
+                        }
                         SelectObject(clickable);
                     }
                 }
@@ -164,7 +168,8 @@ public class SelectController : MonoBehaviour
     }   
 
     public void DeselectAll()
-    {
+    { 
+        if (selectedObjects.Count == 0) return;
         foreach (Clickable selectedObject in selectedObjects)
         {
             selectedObject.Deselect();
