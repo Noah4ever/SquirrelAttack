@@ -63,6 +63,7 @@ public class SelectController : MonoBehaviour
             {
                 // Clickable is not a clickable object
                 setMouseCursor(ClickActionType.Point);
+                // TODO: has selected frienldy objects? set mouse cursor to move
             }
 
         }
