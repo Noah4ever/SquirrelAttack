@@ -16,6 +16,84 @@ public class SelectController : MonoBehaviour
         ShiftRightClick
     }
 
+    public enum ClickActionType
+    {
+        Select,
+        Move,
+        Attack,
+        Follow,
+        Point
+    }
+
+    public void Hover(Vector3 mouseScreenPos)
+    {
+        // Convert the screen position to a ray
+        Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            // Get the Clickable component from the hit object
+            Clickable clickable = hit.collider.GetComponent<Clickable>();
+
+            if (clickable != null)
+            {
+                // Clickable is a clickable object
+                switch (clickable.TeamType)
+                {
+                    case TeamType.Friendly:
+                        setMouseCursor(ClickActionType.Select);
+                        break;
+                    case TeamType.Enemy:
+                        if(hasSelectedObjects())
+                        {
+                            setMouseCursor(ClickActionType.Attack);
+                        }
+                        else
+                        {
+                            setMouseCursor(ClickActionType.Select);
+                        }
+                        break;
+                    default:
+                        setMouseCursor(ClickActionType.Select);
+                        break;
+                }
+            }
+            else
+            {
+                // Clickable is not a clickable object
+                setMouseCursor(ClickActionType.Point);
+            }
+
+        }
+    }
+
+    private void setMouseCursor(ClickActionType clickActionType)
+    {
+        switch (clickActionType)
+        {
+            case ClickActionType.Select:
+                // TODO: Set mouse cursor to select
+                break;
+            case ClickActionType.Move:
+                // TODO: Set mouse cursor to move
+                break;
+            case ClickActionType.Attack:
+                // TODO: Set mouse cursor to attack
+                break;
+            case ClickActionType.Follow:
+                // TODO: Set mouse cursor to follow
+                break;
+            case ClickActionType.Point:
+                // TODO: Set mouse cursor to point
+                break;
+            default:
+                // TODO: Set mouse cursor to point
+                break;
+        }
+    }
+
+
     // TODO: Test this shit
     public void Click(Vector3 screenClickPosition, ClickType clickType)
     {
