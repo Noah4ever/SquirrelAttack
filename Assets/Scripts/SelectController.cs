@@ -8,6 +8,7 @@ public class SelectController : MonoBehaviour
     [SerializeField]
     private List<Clickable> selectedObjects = new List<Clickable>();
 
+    private CursorController cursorController;
     public enum ClickType
     {
         LeftClick, 
@@ -16,13 +17,9 @@ public class SelectController : MonoBehaviour
         ShiftRightClick
     }
 
-    public enum ClickActionType
+    private void Awake()
     {
-        Select,
-        Move,
-        Attack,
-        Follow,
-        Point
+        cursorController = GetComponent<CursorController>();        
     }
 
     public void Hover(Vector3 mouseScreenPos)
@@ -42,58 +39,44 @@ public class SelectController : MonoBehaviour
                 switch (clickable.TeamType)
                 {
                     case TeamType.Friendly:
-                        setMouseCursor(ClickActionType.Select);
+                        cursorController.setCursor(CursorController.ClickActionType.Select);
                         break;
                     case TeamType.Enemy:
-                        if(hasSelectedObjects())
+                        if(hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
                         {
-                            setMouseCursor(ClickActionType.Attack);
+                            cursorController.setCursor(CursorController.ClickActionType.Attack);
                         }
                         else
                         {
-                            setMouseCursor(ClickActionType.Select);
+                            cursorController.setCursor(CursorController.ClickActionType.Select);
                         }
                         break;
                     default:
-                        setMouseCursor(ClickActionType.Select);
+                        cursorController.setCursor(CursorController.ClickActionType.Select);
                         break;
                 }
             }
             else
             {
-                // Clickable is not a clickable object
-                setMouseCursor(ClickActionType.Point);
-                // TODO: has selected frienldy objects? set mouse cursor to move
+                // If selected objects are friendly, set the mouse cursor to move
+                if (hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
+                {
+                    cursorController.setCursor(CursorController.ClickActionType.Move);
+                }
+                else
+                {
+                    // Clickable is not a clickable object
+                    cursorController.setCursor(CursorController.ClickActionType.Point);
+                }
             }
 
         }
-    }
-
-    private void setMouseCursor(ClickActionType clickActionType)
-    {
-        switch (clickActionType)
+        else
         {
-            case ClickActionType.Select:
-                // TODO: Set mouse cursor to select
-                break;
-            case ClickActionType.Move:
-                // TODO: Set mouse cursor to move
-                break;
-            case ClickActionType.Attack:
-                // TODO: Set mouse cursor to attack
-                break;
-            case ClickActionType.Follow:
-                // TODO: Set mouse cursor to follow
-                break;
-            case ClickActionType.Point:
-                // TODO: Set mouse cursor to point
-                break;
-            default:
-                // TODO: Set mouse cursor to point
-                break;
+            // No object was hit
+            cursorController.setCursor(CursorController.ClickActionType.Point);
         }
     }
-
 
     // TODO: Test this shit
     public void Click(Vector3 screenClickPosition, ClickType clickType)

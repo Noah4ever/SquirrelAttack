@@ -37,7 +37,7 @@ public class PlayerController : Updateable
         // Sets the mouse cursor to the correct icon
         selectController.Hover(Input.mousePosition);
 
-        if(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
         {
             isShiftDown = true;
         }
