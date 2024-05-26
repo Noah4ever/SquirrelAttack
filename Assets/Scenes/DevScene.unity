@@ -1084,6 +1084,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad33dd7b2211be948a57a7b48618b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorPoint: {fileID: 2800000, guid: 1086aead33556554980ae3820928019e, type: 3}
+  cursorSelect: {fileID: 2800000, guid: b0f5416aec04cbc40824d86db78a70ac, type: 3}
+  cursorMove: {fileID: 2800000, guid: 9c1c6c3fc16b38748a3fbcfe28ed8f8c, type: 3}
+  cursorAttack: {fileID: 2800000, guid: eab5bc042d836874fb7d6f7c5052529e, type: 3}
+  cursorFollow: {fileID: 2800000, guid: 63e6ca1e057d83645903d9071ab3ff6f, type: 3}
 --- !u!1 &1289003331
 GameObject:
   m_ObjectHideFlags: 0
