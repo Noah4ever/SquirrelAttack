@@ -6,16 +6,17 @@ using UnityEngine;
 public class House : Building
 {
     [SerializeField]
-    protected int humanCapacity { get; set; }
+    public int humanCapacity { get; set; }
     [SerializeField]
-    protected List<Human> humansLiving { get; set; }
+    public List<Human> humansLiving { get; set; }
     [SerializeField]
-    protected List<Lifeform> lifeformsInside { get; }
+    public List<Lifeform> lifeformsInside;
     [SerializeField]
-    protected bool openForAnimals { get; set; }
+    public bool openForAnimals { get; set; }
 
     void Start()
     {
+        lifeformsInside = new List<Lifeform>();
         base.Start();
     }
     void Update()
@@ -34,7 +35,7 @@ public class House : Building
 
     public bool MoreAnimalsThenHumans()
     {
-        // TODO: Not very good because there could be friendly humans and hostile animals
+        // TODO: Not very good because there could be friendly humans and hostile animals but i cant access teamtype because it is in clickable
         int animals = 0;
         int humans = 0;
 

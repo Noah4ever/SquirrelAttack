@@ -5,9 +5,9 @@ using UnityEngine;
 public class Building : Updateable
 {
     [SerializeField]
-    protected float cityInfluence { get; set; }
+    public float cityInfluence { get; set; }
     [SerializeField]
-    protected float reclaimed { get; set; }
+    public float reclaimed { get; set; }
 
     protected override void Start()
     {
