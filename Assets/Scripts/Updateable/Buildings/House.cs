@@ -1,3 +1,4 @@
+using Codice.Client.Common.GameUI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,13 @@ using UnityEngine;
 public class House : Building
 {
     [SerializeField]
-    private int humanCapacity { get; set; }
+    protected int humanCapacity { get; set; }
     [SerializeField]
-    private List<Human> humansLiving { get; set; }
+    protected List<Human> humansLiving { get; set; }
     [SerializeField]
-    private List<Lifeform> lifeformsInside { get; }
+    protected List<Lifeform> lifeformsInside { get; }
     [SerializeField]
-    private bool openForAnimals { get; set; }
+    protected bool openForAnimals { get; set; }
 
     void Start()
     {
@@ -22,20 +23,41 @@ public class House : Building
         base.Update();
     }
 
-    public override update()
+    public override void update()
     {
         // TODO: do magic here to update reclaimed int 
-        // 1. if more animals then humans
-        // 2. if more animals.presence then humans.presence
-        // 3. ...
+        // Maybe: if more animals then humans
+        // Or: if more animals.presence then humans.presence
+        // Something else: ...
+
     }
 
-    public LifeformEnter(Lifeform lifeform)
+    public bool MoreAnimalsThenHumans()
+    {
+        // TODO: Not very good because there could be friendly humans and hostile animals
+        int animals = 0;
+        int humans = 0;
+
+        foreach (Lifeform lifeform in lifeformsInside)
+        {
+            if (lifeform is Human)
+            {
+                humans++;
+            }
+            else if (lifeform is Animal)
+            {
+                animals++;
+            }
+        }
+        return animals > humans;
+    }
+
+    public void LifeformEnter(Lifeform lifeform)
     {
         lifeformsInside.Add(lifeform);
     }
 
-    public LifeformLeave(Lifeform lifeform)
+    public void LifeformLeave(Lifeform lifeform)
     {
         lifeformsInside.Remove(lifeform);
     }
