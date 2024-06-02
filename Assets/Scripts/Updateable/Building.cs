@@ -5,9 +5,15 @@ using UnityEngine;
 public class Building : Updateable
 {
     [SerializeField]
-    private float cityInfluence { get; set; }
+    public float cityInfluence;
     [SerializeField]
-    private int reclaimed { get; set; }
+    public float reclaimed;
+    [SerializeField]
+    public float fullyReclaimed = 100;
+    [SerializeField]
+    public float reclaimPerSecond = 1;
+    [SerializeField]
+    public bool openForAnimals;
 
     protected override void Start()
     {

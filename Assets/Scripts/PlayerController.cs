@@ -33,7 +33,7 @@ public class PlayerController : Updateable
         followOffset = virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
     }
     
-    void Start()
+    new void Start()
     {
         mainCameraXRotOffset = Camera.main.transform.eulerAngles.x;
         base.Start();
@@ -43,7 +43,7 @@ public class PlayerController : Updateable
         addToTimeController();
     }
 
-    void Update()
+    new void Update()
     {
         base.Update();
     }

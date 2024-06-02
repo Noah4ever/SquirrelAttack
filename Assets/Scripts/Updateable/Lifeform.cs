@@ -6,19 +6,19 @@ using UnityEngine;
 public class Lifeform : Updateable
 {
     [SerializeField]
-    protected float speed { get; set; }
+    protected float speed;
     [SerializeField]
-    protected float fear { get; set; }
+    protected float fear;
     [SerializeField]
-    protected float mood { get; set; }
+    protected float mood;
     [SerializeField]
-    protected float damage { get; set; }
+    protected float damage;
     [SerializeField]
-    protected float attackRadius { get; set; }
+    protected float attackRadius;
     [SerializeField]
-    protected float presence { get; set; }
+    protected float presence;
     [SerializeField]
-    protected float presenceRadius { get; set; }
+    protected float presenceRadius;
 
     [SerializeField]
     protected List<ActionType> actions;
