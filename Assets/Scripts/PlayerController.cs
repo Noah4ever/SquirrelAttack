@@ -9,7 +9,7 @@ public class PlayerController : Updateable
 
     private bool isShiftDown = false;
 
-    void Start()
+    new void Start()
     {
         base.Start();
 
@@ -19,7 +19,7 @@ public class PlayerController : Updateable
         addToTimeController();
     }
 
-    void Update()
+    new void Update()
     {
         base.Update();
     }

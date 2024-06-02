@@ -14,19 +14,25 @@ public class TimeController : MonoBehaviour
 
     public void Start()
     {
-        StartTime();
     }
 
     void Update()
     {
         // Increment timer by the time since the last frame
         timer += Time.deltaTime;
-
         // If enough time has passed based on tick rate, increment the tick count
         while (timer >= 1.0f / tickRate)
         {
             currentTick++;
             timer -= 1.0f / tickRate;
+        }
+        if(isRunning)
+        {
+            StartTime();
+        }
+        else
+        {
+            StopTime();
         }
     }
 

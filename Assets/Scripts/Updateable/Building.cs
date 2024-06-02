@@ -9,7 +9,9 @@ public class Building : Updateable
     [SerializeField]
     public float reclaimed;
     [SerializeField]
-    public float timeToReclaim;
+    public float fullyReclaimed = 100;
+    [SerializeField]
+    public float reclaimPerSecond = 1;
     [SerializeField]
     public bool openForAnimals;
 

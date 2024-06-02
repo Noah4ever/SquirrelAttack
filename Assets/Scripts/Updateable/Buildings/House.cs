@@ -11,15 +11,14 @@ public class House : Building
     [SerializeField]
     public List<Human> humansLiving;
     [SerializeField]
-    public List<Lifeform> lifeformsInside;
+    public List<Lifeform> lifeformsInside; // TODO: Maybe change to GameObject instead of Lifeform so we can access Clickable aswe
 
-    void Start()
+    new void Start()
     {
         base.Start();
-        lifeformsInside = new List<Lifeform>();
         addToTimeController();
     }
-    void Update()
+    new void Update()
     {
         base.Update();
     }
@@ -31,27 +30,16 @@ public class House : Building
         // Or: if more animals.presence then humans.presence
         // Something else: ...
 
-        // check if more animals then humans and if time to reclaim is over then reclaim
-        Console.WriteLine("Update: " + reclaimed);
-        if (MoreAnimalsThenHumans() && reclaimed < 100)
+        if (MoreAnimalsThenHumans() && reclaimed < fullyReclaimed)
         {
-            reclaimed += Time.deltaTime / timeToReclaim;
-            Console.WriteLine("1Reclaimed: " + reclaimed);
+            // check if more animals then humans and if time to reclaim is over then reclaim for animals
+            reclaimed += Time.deltaTime / reclaimPerSecond;
         }
-        // check if more humans then animals and if time to reclaim is over then reclaim
         else if (!MoreAnimalsThenHumans() && reclaimed > 0)
         {
-            reclaimed -= Time.deltaTime / timeToReclaim;
-            Console.WriteLine("2Reclaimed: " + reclaimed);
+            // check if more humans then animals and if time to reclaim is over then reclaim for humans
+            reclaimed -= Time.deltaTime / reclaimPerSecond;
         }
-        // check if more humans then animals and if time to reclaim is over then reclaim
-        else if (reclaimed > 0)
-        {
-            reclaimed -= Time.deltaTime / timeToReclaim;
-            Console.WriteLine("3Reclaimed: " + reclaimed);
-        }
-
-
     }
 
     public bool MoreAnimalsThenHumans()
