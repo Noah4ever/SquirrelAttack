@@ -24,26 +24,28 @@ public class PlayerController : Updateable
     private GameController gameController;
     private float mainCameraXRotOffset = 0;
 
+    private SelectController selectController;
+
+    private bool isShiftDown = false;
+
     private void Awake()
     {
         followOffset = virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
     }
-
+    
     void Start()
     {
         mainCameraXRotOffset = Camera.main.transform.eulerAngles.x;
         base.Start();
         gameController = getGameController();
+        GameObject selectcontrollerGo = GameObject.Find("SelectController");
+        selectController = selectcontrollerGo.GetComponent<SelectController>();
+        addToTimeController();
     }
 
     void Update()
     {
         base.Update();
-    }
-
-    public void Move()
-    {
-        // Move the player
     }
 
     /// <summary>
@@ -54,13 +56,40 @@ public class PlayerController : Updateable
         gameController.TogglePause();
     }
 
-
     public override void update()
     {
         MoveCamera();
         MoveCameraDragPan();
         RotateCamera();
         ZoomCamera();
+        
+        if(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            isShiftDown = true;
+        }
+        if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            isShiftDown = false;
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            if(isShiftDown)
+            {
+                // Shift select
+                selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftLeftClick);
+            }
+            else
+            {
+                // Normal Select
+                selectController.Click(Input.mousePosition, SelectController.ClickType.LeftClick);
+            }
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            selectController.Click(Input.mousePosition, SelectController.ClickType.RightClick);
+        }
     }
 
     public void MoveCamera()
@@ -163,6 +192,5 @@ public class PlayerController : Updateable
 
         virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = 
             Vector3.Lerp(virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, followOffset, zoomSpeed * Time.deltaTime);
-
     }
 }
