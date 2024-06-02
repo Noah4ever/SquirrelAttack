@@ -64,7 +64,7 @@ public class PlayerController : Updateable
         selectController.Hover(Input.mousePosition);
 
         MoveCamera();
-        MoveCameraDragPan();
+        //MoveCameraDragPan();
         RotateCamera();
         ZoomCamera();
         
