@@ -21,12 +21,16 @@ public class GameController : MonoBehaviour
         {
             playerController = getPlayerController();
         }
+        StartTime();
     }
 
 
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            TogglePause();
+        }
     }
 
     /// <summary>
