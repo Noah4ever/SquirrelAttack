@@ -74,7 +74,7 @@ public class TimeController : MonoBehaviour
         {
             updateable.StartUpdate();
         }
-        isPaused = false;
+        isRunning = false;
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class TimeController : MonoBehaviour
         {
             updateable.StopUpdate();
         }
-        isPaused = true;
+        isRunning = true;
     }
 
 }
