@@ -8,12 +8,74 @@ public class SelectController : MonoBehaviour
     [SerializeField]
     private List<Clickable> selectedObjects = new List<Clickable>();
 
+    private CursorController cursorController;
     public enum ClickType
     {
         LeftClick, 
         ShiftLeftClick,
         RightClick,
         ShiftRightClick
+    }
+
+    private void Awake()
+    {
+        cursorController = GetComponent<CursorController>();        
+    }
+
+    public void Hover(Vector3 mouseScreenPos)
+    {
+        // Convert the screen position to a ray
+        Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            // Get the Clickable component from the hit object
+            Clickable clickable = hit.collider.GetComponent<Clickable>();
+
+            if (clickable != null)
+            {
+                // Clickable is a clickable object
+                switch (clickable.TeamType)
+                {
+                    case TeamType.Friendly:
+                        cursorController.setCursor(CursorController.ClickActionType.Select);
+                        break;
+                    case TeamType.Enemy:
+                        if(hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
+                        {
+                            cursorController.setCursor(CursorController.ClickActionType.Attack);
+                        }
+                        else
+                        {
+                            cursorController.setCursor(CursorController.ClickActionType.Select);
+                        }
+                        break;
+                    default:
+                        cursorController.setCursor(CursorController.ClickActionType.Select);
+                        break;
+                }
+            }
+            else
+            {
+                // If selected objects are friendly, set the mouse cursor to move
+                if (hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
+                {
+                    cursorController.setCursor(CursorController.ClickActionType.Move);
+                }
+                else
+                {
+                    // Clickable is not a clickable object
+                    cursorController.setCursor(CursorController.ClickActionType.Point);
+                }
+            }
+
+        }
+        else
+        {
+            // No object was hit
+            cursorController.setCursor(CursorController.ClickActionType.Point);
+        }
     }
 
     // TODO: Test this shit

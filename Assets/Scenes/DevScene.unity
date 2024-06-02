@@ -1141,6 +1141,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 942697186611009971, guid: 014ef47582a02d042933be0f3e437a74, type: 3}
+      propertyPath: cursorPoint
+      value: 
+      objectReference: {fileID: 2800000, guid: b0aa39c4400fb264d9c8c093e41bc1fb, type: 3}
     - target: {fileID: 4924024301083594148, guid: 014ef47582a02d042933be0f3e437a74, type: 3}
       propertyPath: m_Name
       value: SelectController
@@ -1188,7 +1192,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4924024301083594148, guid: 014ef47582a02d042933be0f3e437a74, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1266521490}
   m_SourcePrefab: {fileID: 100100000, guid: 014ef47582a02d042933be0f3e437a74, type: 3}
 --- !u!1 &1023909096
 GameObject:
@@ -1453,6 +1460,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1266521487 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4924024301083594148, guid: 014ef47582a02d042933be0f3e437a74, type: 3}
+  m_PrefabInstance: {fileID: 976318950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1266521490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266521487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad33dd7b2211be948a57a7b48618b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorPoint: {fileID: 2800000, guid: 1086aead33556554980ae3820928019e, type: 3}
+  cursorSelect: {fileID: 2800000, guid: b0f5416aec04cbc40824d86db78a70ac, type: 3}
+  cursorMove: {fileID: 2800000, guid: 9c1c6c3fc16b38748a3fbcfe28ed8f8c, type: 3}
+  cursorAttack: {fileID: 2800000, guid: eab5bc042d836874fb7d6f7c5052529e, type: 3}
+  cursorFollow: {fileID: 2800000, guid: 63e6ca1e057d83645903d9071ab3ff6f, type: 3}
 --- !u!1 &1289003331
 GameObject:
   m_ObjectHideFlags: 0
