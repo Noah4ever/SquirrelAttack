@@ -10,26 +10,27 @@ public class MoveTo : MonoBehaviour
     private Vector3 lastPosition;
     [SerializeField]
     private Animator animator;
-
+    private Vector3 tempPos;
+    public string speedParameterName    = "Speed";
+    public string rotationParameterName = "Rotation";
+    private void Start()
+    {
+        tempPos = transform.position;
+    }
     void Update()
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        Vector3 velocity = (transform.position - tempPos) / Time.deltaTime;
+        tempPos = transform.position;
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        Debug.Log(localVelocity);
         if (agent == null) return;
-        Debug.Log(agent.velocity.sqrMagnitude);
-        if (agent.velocity.sqrMagnitude > 1.0)
-        {
+        animator.SetFloat(speedParameterName, Mathf.Clamp(Vector3.Magnitude(localVelocity) / 3.5f, 0, 1));
+        animator.SetFloat(rotationParameterName, Mathf.Clamp(localVelocity.x / 3.5f, -1, 1));
 
-            animator.SetBool("isWalking", true);
-        }
-        else
-        {
-            animator.SetBool("isWalking", false);
-        }
         if (lastPosition == targetPosition.transform.position) return;
 
         Vector3 newTargetPosition = targetPosition.transform.position;
-
-        // Get current speed of the agent and play animation from that
         
         agent.destination = newTargetPosition;
 
