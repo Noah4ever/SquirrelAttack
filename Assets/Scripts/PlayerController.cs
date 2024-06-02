@@ -22,6 +22,8 @@ public class PlayerController : Updateable
     private Vector3 followOffset;
 
     private GameController gameController;
+    private Camera mainCamera;
+    private float mainCameraXRotOffset = 0;
 
     private void Awake()
     {
@@ -30,6 +32,8 @@ public class PlayerController : Updateable
 
     void Start()
     {
+        mainCameraXRotOffset = Camera.main.transform.eulerAngles.x;
+        Debug.Log(Camera.main.transform.eulerAngles);
         base.Start();
         gameController = getGameController();
     }
@@ -128,9 +132,15 @@ public class PlayerController : Updateable
 
             lastMousePosition = Input.mousePosition;
         }
-
-        cameraLookAtTarget.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
-        cameraLookAtTarget.eulerAngles += new Vector3(-dragRotateDir.y * rotateSpeed * Time.deltaTime, dragRotateDir.x * rotateSpeed * Time.deltaTime, 0);
+        Vector3 newEulerAngles = cameraLookAtTarget.eulerAngles + new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0) + new Vector3(-dragRotateDir.y * rotateSpeed * Time.deltaTime, dragRotateDir.x * rotateSpeed * Time.deltaTime, 0);
+        Debug.Log((newEulerAngles.x + mainCameraXRotOffset) % 360);
+        float xAngle = (newEulerAngles.x + mainCameraXRotOffset) % 360f;
+        
+        if (xAngle >= rotateMinMaxAngle.x && xAngle <= rotateMinMaxAngle.y) 
+        {
+            // TODO: maybe use Mathf.Clamp here
+            cameraLookAtTarget.eulerAngles = new Vector3(newEulerAngles.x,newEulerAngles.y,newEulerAngles.z);
+        }
     }
 
     private void ZoomCamera()
