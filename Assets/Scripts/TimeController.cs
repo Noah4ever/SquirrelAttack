@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
+    [Tooltip("The rate at which ticks occur (ticks per second)")]
     public float tickRate = 1.0f; // The rate at which ticks occur (ticks per second)
     private float timer = 0.0f; // Timer to keep track of when to increment ticks
     private int currentTick = 0;
@@ -65,6 +66,7 @@ public class TimeController : MonoBehaviour
         {
             updateable.StartUpdate();
         }
+        isPaused = false;
     }
 
     /// <summary>
@@ -76,6 +78,7 @@ public class TimeController : MonoBehaviour
         {
             updateable.StopUpdate();
         }
+        isPaused = true;
     }
 
 }
