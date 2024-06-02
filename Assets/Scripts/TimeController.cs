@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
+    [Tooltip("The rate at which ticks occur (ticks per second)")]
     public float tickRate = 1.0f; // The rate at which ticks occur (ticks per second)
     private float timer = 0.0f; // Timer to keep track of when to increment ticks
     private int currentTick = 0;
 
-    public bool isPaused = false;
+    public bool isRunning = true;
 
     private List<IUpdateable> updateables = new List<IUpdateable>();
 
@@ -19,14 +21,20 @@ public class TimeController : MonoBehaviour
     {
         // Increment timer by the time since the last frame
         timer += Time.deltaTime;
-
         // If enough time has passed based on tick rate, increment the tick count
         while (timer >= 1.0f / tickRate)
         {
             currentTick++;
             timer -= 1.0f / tickRate;
         }
-        StartTime();
+        if(isRunning)
+        {
+            StartTime();
+        }
+        else
+        {
+            StopTime();
+        }
     }
 
     /// <summary>
@@ -61,10 +69,12 @@ public class TimeController : MonoBehaviour
     /// </summary>
     public void StartTime()
     {
+        Console.WriteLine("Starting Time");
         foreach (IUpdateable updateable in updateables)
         {
             updateable.StartUpdate();
         }
+        isPaused = false;
     }
 
     /// <summary>
@@ -76,6 +86,7 @@ public class TimeController : MonoBehaviour
         {
             updateable.StopUpdate();
         }
+        isPaused = true;
     }
 
 }
