@@ -5,9 +5,13 @@ using UnityEngine;
 public class Building : Updateable
 {
     [SerializeField]
-    public float cityInfluence { get; set; }
+    public float cityInfluence;
     [SerializeField]
-    public float reclaimed { get; set; }
+    public float reclaimed;
+    [SerializeField]
+    public float timeToReclaim;
+    [SerializeField]
+    public bool openForAnimals;
 
     protected override void Start()
     {

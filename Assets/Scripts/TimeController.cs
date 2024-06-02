@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +8,13 @@ public class TimeController : MonoBehaviour
     private float timer = 0.0f; // Timer to keep track of when to increment ticks
     private int currentTick = 0;
 
-    public bool isPaused = false;
+    public bool isRunning = true;
 
     private List<IUpdateable> updateables = new List<IUpdateable>();
 
     public void Start()
     {
+        StartTime();
     }
 
     void Update()
@@ -26,7 +28,6 @@ public class TimeController : MonoBehaviour
             currentTick++;
             timer -= 1.0f / tickRate;
         }
-        StartTime();
     }
 
     /// <summary>
@@ -61,6 +62,7 @@ public class TimeController : MonoBehaviour
     /// </summary>
     public void StartTime()
     {
+        Console.WriteLine("Starting Time");
         foreach (IUpdateable updateable in updateables)
         {
             updateable.StartUpdate();

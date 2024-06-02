@@ -1,4 +1,5 @@
 using Codice.Client.Common.GameUI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,18 +7,17 @@ using UnityEngine;
 public class House : Building
 {
     [SerializeField]
-    public int humanCapacity { get; set; }
+    public int humanCapacity;
     [SerializeField]
-    public List<Human> humansLiving { get; set; }
+    public List<Human> humansLiving;
     [SerializeField]
     public List<Lifeform> lifeformsInside;
-    [SerializeField]
-    public bool openForAnimals { get; set; }
 
     void Start()
     {
-        lifeformsInside = new List<Lifeform>();
         base.Start();
+        lifeformsInside = new List<Lifeform>();
+        addToTimeController();
     }
     void Update()
     {
@@ -30,6 +30,27 @@ public class House : Building
         // Maybe: if more animals then humans
         // Or: if more animals.presence then humans.presence
         // Something else: ...
+
+        // check if more animals then humans and if time to reclaim is over then reclaim
+        Console.WriteLine("Update: " + reclaimed);
+        if (MoreAnimalsThenHumans() && reclaimed < 100)
+        {
+            reclaimed += Time.deltaTime / timeToReclaim;
+            Console.WriteLine("1Reclaimed: " + reclaimed);
+        }
+        // check if more humans then animals and if time to reclaim is over then reclaim
+        else if (!MoreAnimalsThenHumans() && reclaimed > 0)
+        {
+            reclaimed -= Time.deltaTime / timeToReclaim;
+            Console.WriteLine("2Reclaimed: " + reclaimed);
+        }
+        // check if more humans then animals and if time to reclaim is over then reclaim
+        else if (reclaimed > 0)
+        {
+            reclaimed -= Time.deltaTime / timeToReclaim;
+            Console.WriteLine("3Reclaimed: " + reclaimed);
+        }
+
 
     }
 
@@ -55,6 +76,7 @@ public class House : Building
 
     public void LifeformEnter(Lifeform lifeform)
     {
+        // check if open for animals
         lifeformsInside.Add(lifeform);
     }
 

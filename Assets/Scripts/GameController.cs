@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void TogglePause()
     {
-        if(timeController.isPaused)
+        if(timeController.isRunning)
         {
             StartTime();
         }
