@@ -25,7 +25,6 @@ public class SelectController : MonoBehaviour
     }
     public void hoverClickableChanged()
     {
-        Debug.Log("MouseOver: " + clickableUnderCursor);
 
         if (clickableUnderCursor != null)
         {

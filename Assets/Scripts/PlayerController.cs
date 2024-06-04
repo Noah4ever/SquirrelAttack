@@ -48,6 +48,8 @@ public class PlayerController : Updateable
     new void Update()
     {
         base.Update();
+
+        GetButtonsKeysPressed();
     }
 
     /// <summary>
@@ -64,37 +66,74 @@ public class PlayerController : Updateable
         //MoveCameraDragPan();
         RotateCamera();
         ZoomCamera();
-        
-        if(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-        {
-            isShiftDown = true;
-        }
-        if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
-        {
-            isShiftDown = false;
-        }
 
-        if(Input.GetMouseButtonDown(0))
-        {
-            if(isShiftDown)
-            {
-                // Shift select
-                selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftLeftClick);
-            }
-            else
-            {
-                // Normal Select
-                selectController.Click(Input.mousePosition, SelectController.ClickType.LeftClick);
-            }
-        }
+        if (Input.GetMouseButtonDown(0)) OnLeftClick();
+        if (Input.GetMouseButtonDown(1)) OnRightClick();
+    }
 
-        if(Input.GetMouseButtonDown(1))
+    private void OnLeftClick()
+    {
+        if (isShiftDown)
         {
+            // Shift select
+            selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftLeftClick);
+        }
+        else
+        {
+            // Normal Select
+            selectController.Click(Input.mousePosition, SelectController.ClickType.LeftClick);
+        }
+    }
+
+    private void OnRightClick()
+    {
+        if (isShiftDown)
+        {
+            // Shift select
+            selectController.Click(Input.mousePosition, SelectController.ClickType.ShiftRightClick);
+        }
+        else
+        {
+            // Normal Select
             selectController.Click(Input.mousePosition, SelectController.ClickType.RightClick);
         }
     }
 
-    public void MoveCamera()
+    /// <summary>
+    /// !IMPORTANT: This needs to run in the Update method so that the input is detected correctly!
+    /// Updates all the bools for the keys and buttons pressed
+    /// </summary>
+    private void GetButtonsKeysPressed()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            isShiftDown = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            isShiftDown = false;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            dragPanMoveActive = true;
+            lastMousePosition = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            dragPanMoveActive = false;
+        }
+        if (Input.GetMouseButtonDown(2))
+        {
+            dragRotateActive = true;
+            lastMousePosition = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(2))
+        {
+            dragRotateActive = false;
+        }
+    }
+
+    private void MoveCamera()
     {
         Vector3 inputDir = new Vector3(0, 0, 0);
 
@@ -110,16 +149,6 @@ public class PlayerController : Updateable
     private void MoveCameraDragPan()
     {
         Vector3 inputDir = new Vector3(0, 0, 0);
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            dragPanMoveActive = true;
-            lastMousePosition = Input.mousePosition;
-        }
-        if (Input.GetMouseButtonUp(1))
-        {
-            dragPanMoveActive = false;
-        }
 
         if (dragPanMoveActive)
         {
@@ -143,15 +172,7 @@ public class PlayerController : Updateable
 
 
         Vector2 dragRotateDir = new Vector2(0, 0);
-        if (Input.GetMouseButtonDown(2))
-        {
-            dragRotateActive = true;
-            lastMousePosition = Input.mousePosition;
-        }
-        if (Input.GetMouseButtonUp(2))
-        {
-            dragRotateActive = false;
-        }
+
         if (dragRotateActive)
         {
             Vector2 mouseMovementDelta = (Vector2)Input.mousePosition - lastMousePosition;
