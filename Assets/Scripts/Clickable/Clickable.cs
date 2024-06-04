@@ -9,6 +9,16 @@ public class Clickable : MonoBehaviour
     [SerializeField]
     private TeamType teamType;
 
+    SelectController selectController;
+
+    private void Start()
+    {
+        if(selectController == null) 
+        {
+            selectController = GameObject.Find("SelectController").GetComponent<SelectController>();
+        }
+    }
+
     /// <summary>
     /// Whether this clickable is currently selected.
     /// </summary>
@@ -40,4 +50,13 @@ public class Clickable : MonoBehaviour
         isSelected = false;
     }
 
+    private void OnMouseEnter()
+    {
+        selectController.onMouseEnter(this);
+    }
+
+    private void OnMouseExit()
+    {
+        selectController.onMouseExit(this);
+    }
 }
