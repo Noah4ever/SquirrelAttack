@@ -60,9 +60,6 @@ public class PlayerController : Updateable
 
     public override void update()
     {
-        // Sets the mouse cursor to the correct icon
-        selectController.Hover(Input.mousePosition);
-
         MoveCamera();
         //MoveCameraDragPan();
         RotateCamera();

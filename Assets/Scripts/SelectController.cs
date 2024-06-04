@@ -9,6 +9,8 @@ public class SelectController : MonoBehaviour
     private List<Clickable> selectedObjects = new List<Clickable>();
 
     private CursorController cursorController;
+
+    private Clickable clickableUnderCursor = null;
     public enum ClickType
     {
         LeftClick, 
@@ -21,60 +23,45 @@ public class SelectController : MonoBehaviour
     {
         cursorController = GetComponent<CursorController>();        
     }
-
-    public void Hover(Vector3 mouseScreenPos)
+    public void hoverClickableChanged()
     {
-        // Convert the screen position to a ray
-        Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
-        RaycastHit hit;
+        Debug.Log("MouseOver: " + clickableUnderCursor);
 
-        if (Physics.Raycast(ray, out hit))
+        if (clickableUnderCursor != null)
         {
-            // Get the Clickable component from the hit object
-            Clickable clickable = hit.collider.GetComponent<Clickable>();
-
-            if (clickable != null)
+            // Clickable is a clickable object
+            switch (clickableUnderCursor.TeamType)
             {
-                // Clickable is a clickable object
-                switch (clickable.TeamType)
-                {
-                    case TeamType.Friendly:
+                case TeamType.Friendly:
+                    cursorController.setCursor(CursorController.ClickActionType.Select);
+                    break;
+                case TeamType.Enemy:
+                    if (hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
+                    {
+                        cursorController.setCursor(CursorController.ClickActionType.Attack);
+                    }
+                    else
+                    {
                         cursorController.setCursor(CursorController.ClickActionType.Select);
-                        break;
-                    case TeamType.Enemy:
-                        if(hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
-                        {
-                            cursorController.setCursor(CursorController.ClickActionType.Attack);
-                        }
-                        else
-                        {
-                            cursorController.setCursor(CursorController.ClickActionType.Select);
-                        }
-                        break;
-                    default:
-                        cursorController.setCursor(CursorController.ClickActionType.Select);
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    cursorController.setCursor(CursorController.ClickActionType.Select);
+                    break;
             }
-            else
-            {
-                // If selected objects are friendly, set the mouse cursor to move
-                if (hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
-                {
-                    cursorController.setCursor(CursorController.ClickActionType.Move);
-                }
-                else
-                {
-                    // Clickable is not a clickable object
-                    cursorController.setCursor(CursorController.ClickActionType.Point);
-                }
-            }
-
         }
         else
         {
-            // No object was hit
-            cursorController.setCursor(CursorController.ClickActionType.Point);
+            // If selected objects are friendly, set the mouse cursor to move
+            if (hasSelectedObjects() && selectedObjects[0].TeamType == TeamType.Friendly)
+            {
+                cursorController.setCursor(CursorController.ClickActionType.Move);
+            }
+            else
+            {
+                // Clickable is not a clickable object
+                cursorController.setCursor(CursorController.ClickActionType.Point);
+            }
         }
     }
 
@@ -249,5 +236,18 @@ public class SelectController : MonoBehaviour
         throw new System.NotImplementedException();
     }
 
+    public void onMouseEnter(Clickable clickable)
+    {
+        clickableUnderCursor = clickable;
+        hoverClickableChanged();
+    }
+    public void onMouseExit(Clickable clickable)
+    {
+        if (clickableUnderCursor == clickable)
+        {
+            clickableUnderCursor = null;
+        }
+        hoverClickableChanged();
+    }
 
 }
