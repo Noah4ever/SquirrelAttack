@@ -135,7 +135,6 @@ public class SelectController : MonoBehaviour
                 // Not implemented yet
                 // Maybe implement a walk path with multiple waypoints
             }
-
         }
     }
 
