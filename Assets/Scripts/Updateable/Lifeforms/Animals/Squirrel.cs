@@ -7,7 +7,6 @@ using static UnityEngine.UI.Dropdown;
 
 public class Squirrel : Animal
 {
-    public ActionData currentAction;
     public SquirrelAction currentSquirrelAction;
     // Start is called before the first frame update
     protected override void Start()
@@ -27,13 +26,14 @@ public class Squirrel : Animal
         currentSquirrelAction.update(timeController.GetCurrentTick());
     }
 
-public override void doAction(ActionData actionData)
-{
+    public override void doAction(ActionData actionData)
+    {
     currentSquirrelAction.end();
     switch(actionData.actionType)
     {
         case ActionType.Attack:
-            Attack((AttackActionData)actionData);
+            // Set currentSquirrelAction to SquirrelAttack
+            // currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData).targetPosition);
             break;
         case ActionType.Move:
             currentSquirrelAction = new SquirrelMove(this,((MoveActionData)actionData));
@@ -45,9 +45,9 @@ public override void doAction(ActionData actionData)
         default:
             break;
     }
-        currentSquirrelAction.execute();
-}
-    public void setDestination(Vector3 destination) 
+    currentSquirrelAction.execute();
+    }
+    public void setDestination(Vector3 destination)
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.destination = destination;
@@ -56,20 +56,5 @@ public override void doAction(ActionData actionData)
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.ResetPath();
-    }
-    private void Move(MoveActionData actionData)
-    {
-    }
-
-    private void Attack(AttackActionData actionData)
-    {
-        Debug.Log("Squirrel should attack: " + actionData.target.transform.position);
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        agent.destination = actionData.target.transform.position;
-    }
-
-    private void Follow(FollowActionData actionData)
-    {
-        Debug.Log("Squirrel should follow: " + actionData.targetFollow.transform.position);
     }
 }
