@@ -36,11 +36,11 @@ public override void doAction(ActionData actionData)
             Attack((AttackActionData)actionData);
             break;
         case ActionType.Move:
-            currentSquirrelAction = new SquirrelMove(this,((MoveActionData)actionData).targetPosition);
+            currentSquirrelAction = new SquirrelMove(this,((MoveActionData)actionData));
             
             break;
         case ActionType.Follow:
-            currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData).targetFollow,timeController.GetCurrentTick());
+            currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData),timeController.GetCurrentTick());
             break;
         default:
             break;
