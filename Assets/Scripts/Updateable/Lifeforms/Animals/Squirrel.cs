@@ -13,6 +13,7 @@ public class Squirrel : Animal
     {
         base.Start();
         currentSquirrelAction = new SquirrelIdel(this);
+        actions.Add(ActionType.Idle);
         actions.Add(ActionType.Move);
         actions.Add(ActionType.Attack);
         actions.Add(ActionType.Follow);
@@ -28,24 +29,25 @@ public class Squirrel : Animal
 
     public override void doAction(ActionData actionData)
     {
-    currentSquirrelAction.end();
-    switch(actionData.actionType)
-    {
-        case ActionType.Attack:
-            // Set currentSquirrelAction to SquirrelAttack
-            // currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData).targetPosition);
-            break;
-        case ActionType.Move:
-            currentSquirrelAction = new SquirrelMove(this,((MoveActionData)actionData));
-            
-            break;
-        case ActionType.Follow:
-            currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData),timeController.GetCurrentTick());
-            break;
-        default:
-            break;
-    }
-    currentSquirrelAction.execute();
+        currentSquirrelAction.end();
+        switch (actionData.actionType)
+        {
+            case ActionType.Idle:
+                currentSquirrelAction = new SquirrelIdel(this);
+                break;
+            case ActionType.Attack:
+                currentSquirrelAction = new SquirrelAttack(this, ((AttackActionData)actionData), timeController.GetCurrentTick());
+                break;
+            case ActionType.Move:
+                currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData));
+                break;
+            case ActionType.Follow:
+                currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData), timeController.GetCurrentTick());
+                break;
+            default:
+                break;
+        }
+        currentSquirrelAction.execute();
     }
     public void setDestination(Vector3 destination)
     {

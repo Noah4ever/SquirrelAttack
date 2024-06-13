@@ -35,20 +35,25 @@ public class SquirrelMove : SquirrelAction
 
 public class SquirrelAttack : SquirrelAction
 {
-    GameObject target;
+    AttackActionData attackActionData;
+    AttackController squirrelAttackController;
     int nextUpdate;
     int updateInterval = 1;
     int attackDistance = 3;
     int attackInterval = 3;
     int lastAttackTime = int.MinValue;
-    public SquirrelAttack(Squirrel squirrel, GameObject target, int nextUpdate)
+    public SquirrelAttack(Squirrel squirrel, AttackActionData attackActionData, int nextUpdate)
     {
         this.squirrel = squirrel;
-        this.target = target;
+        this.attackActionData = attackActionData;
+        squirrelAttackController = squirrel.GetComponent<AttackController>();
+        squirrelAttackController.setTarget(attackActionData.target.GetComponent<AttackController>());
         this.nextUpdate = nextUpdate;
     }
     public override void execute()
     {
+        if (Vector3.Distance(this.squirrel.transform.position, attackActionData.target.transform.position) > attackDistance)
+            this.squirrel.setDestination(attackActionData.target.transform.position);
     }
     public override void end()
     {
@@ -57,13 +62,27 @@ public class SquirrelAttack : SquirrelAction
 
     public override void update(int currentTick)
     {
+        
         if (this.nextUpdate < currentTick)
         {
-            if (Vector3.Distance(this.squirrel.transform.position, target.transform.position) < attackDistance && lastAttackTime + attackInterval < currentTick)
+            if (Vector3.Distance(this.squirrel.transform.position, attackActionData.target.transform.position) < attackDistance)
             {
-                // Start Atack Animation
-                // Damage opponent ?
-                this.lastAttackTime = currentTick;
+                this.squirrel.resetDestination();
+                if (lastAttackTime + attackInterval < currentTick) 
+                {
+                    // TODO: Start Atack Animation
+                    AttackController attackController = this.attackActionData.target.GetComponent<AttackController>();
+                    attackController.ApplyMeleeDamage(10);
+                    if (attackController.getLifePoints() <= 0) 
+                    {
+                        this.squirrel.doAction(new IdleActionData());
+                    }
+                    this.lastAttackTime = currentTick;
+                }
+            }
+            else 
+            {
+                    execute();
             }
             nextUpdate = currentTick + updateInterval;
         }
