@@ -28,23 +28,24 @@ public class Squirrel : Animal
 
     public override void doAction(ActionData actionData)
     {
-        currentSquirrelAction.end();
-        switch (actionData.actionType)
-        {
-            case ActionType.Attack:
-                // Set currentSquirrelAction to SquirrelAttack
-                // currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData).targetPosition);
-                break;
-            case ActionType.Move:
-                currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData).targetPosition);
-                break;
-            case ActionType.Follow:
-                currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData).targetFollow, timeController.GetCurrentTick());
-                break;
-            default:
-                break;
-        }
-        currentSquirrelAction.execute();
+    currentSquirrelAction.end();
+    switch(actionData.actionType)
+    {
+        case ActionType.Attack:
+            // Set currentSquirrelAction to SquirrelAttack
+            // currentSquirrelAction = new SquirrelMove(this, ((MoveActionData)actionData).targetPosition);
+            break;
+        case ActionType.Move:
+            currentSquirrelAction = new SquirrelMove(this,((MoveActionData)actionData));
+            
+            break;
+        case ActionType.Follow:
+            currentSquirrelAction = new SquirrelFollow(this, ((FollowActionData)actionData),timeController.GetCurrentTick());
+            break;
+        default:
+            break;
+    }
+    currentSquirrelAction.execute();
     }
     public void setDestination(Vector3 destination)
     {

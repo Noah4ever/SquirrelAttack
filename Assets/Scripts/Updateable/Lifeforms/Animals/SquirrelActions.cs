@@ -13,15 +13,15 @@ public abstract class SquirrelAction
 
 public class SquirrelMove : SquirrelAction
 {
-    Vector3 targetPosition;
-    public SquirrelMove(Squirrel squirrel, Vector3 targetPosition)
+    MoveActionData actionData;
+    public SquirrelMove(Squirrel squirrel, MoveActionData actionData)
     {
         this.squirrel = squirrel;
-        this.targetPosition = targetPosition;
+        this.actionData = actionData;
     }
     public override void execute()
     {
-        this.squirrel.setDestination(targetPosition);
+        this.squirrel.setDestination(actionData.targetPosition);
     }
     public override void end()
     {
@@ -72,18 +72,18 @@ public class SquirrelAttack : SquirrelAction
 
 public class SquirrelFollow : SquirrelAction
 {
-    GameObject target;
+    FollowActionData followActionData;
     int nextUpdate;
     int updateInterval = 1;
-    public SquirrelFollow(Squirrel squirrel, GameObject target, int nextUpdate)
+    public SquirrelFollow(Squirrel squirrel, FollowActionData followActionData, int nextUpdate)
     {
         this.squirrel = squirrel;
-        this.target = target;
+        this.followActionData = followActionData;
         this.nextUpdate = nextUpdate;
     }
     public override void execute()
     {
-        this.squirrel.setDestination(target.transform.position);
+        this.squirrel.setDestination(followActionData.targetFollow.transform.position);
     }
     public override void end()
     {
