@@ -37,6 +37,9 @@ public class SquirrelAttack : SquirrelAction
 {
     AttackActionData attackActionData;
     AttackController squirrelAttackController;
+
+    private SquirrelFollow follow;
+
     int nextUpdate;
     int updateInterval = 1;
     int attackDistance = 3;
@@ -46,6 +49,7 @@ public class SquirrelAttack : SquirrelAction
     {
         this.squirrel = squirrel;
         this.attackActionData = attackActionData;
+        this.follow = new SquirrelFollow(squirrel, new FollowActionData(attackActionData.target),nextUpdate);
         squirrelAttackController = squirrel.GetComponent<AttackController>();
         squirrelAttackController.setTarget(attackActionData.target.GetComponent<AttackController>());
         this.nextUpdate = nextUpdate;
@@ -53,7 +57,7 @@ public class SquirrelAttack : SquirrelAction
     public override void execute()
     {
         if (Vector3.Distance(this.squirrel.transform.position, attackActionData.target.transform.position) > attackDistance)
-            this.squirrel.setDestination(attackActionData.target.transform.position);
+            this.follow.execute();
     }
     public override void end()
     {
@@ -67,7 +71,7 @@ public class SquirrelAttack : SquirrelAction
         {
             if (Vector3.Distance(this.squirrel.transform.position, attackActionData.target.transform.position) < attackDistance)
             {
-                this.squirrel.resetDestination();
+                this.follow.end();
                 if (lastAttackTime + attackInterval < currentTick) 
                 {
                     // TODO: Start Atack Animation
@@ -80,9 +84,9 @@ public class SquirrelAttack : SquirrelAction
                     this.lastAttackTime = currentTick;
                 }
             }
-            else 
+            else
             {
-                    execute();
+                this.follow.execute();
             }
             nextUpdate = currentTick + updateInterval;
         }
@@ -108,7 +112,6 @@ public class SquirrelFollow : SquirrelAction
     {
         this.squirrel.resetDestination();
     }
-
     public override void update(int currentTick)
     {
         if (this.nextUpdate < currentTick) 
